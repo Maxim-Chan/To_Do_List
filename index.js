@@ -8,11 +8,6 @@ const port = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-// let items = [
-//   { id: 1, title: "Buy milk" },
-//   { id: 2, title: "Finish homework" },
-// ];
-
 const db = new pg.Client({
   user: "postgres",
   host: "localhost",
@@ -20,7 +15,6 @@ const db = new pg.Client({
   password: "",
   port: 5432
 })
-
 db.connect()
 
 app.get("/", async (req, res) => {
@@ -61,8 +55,16 @@ app.post("/edit", async (req, res) => {
   res.redirect("/")
 });
 
-app.post("/delete", (req, res) => {
-  
+app.post("/delete", async (req, res) => {
+  try {
+    const deleteItemId = req.body.deleteItemId;
+
+    await db.query("DELETE FROM items WHERE id = $1", [deleteItemId]);
+
+  } catch (err) {
+    console.log(err);
+  }
+  res.redirect("/");
 });
 
 app.listen(port, () => {
