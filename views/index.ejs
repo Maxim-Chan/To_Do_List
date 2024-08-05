@@ -20,10 +20,10 @@
           <input type="hidden" name="updatedItemId" value="<%= item.id %>">
           <input id="input<%=item.id%>" type="text" name="updatedItemTitle" value="<%= item.title %>" autocomplete="off"
             autofocus="true" hidden="true" />
-          <button id="done<%=item.id%>" class="edit" type="submit" hidden><img class="icon"
+          <button id="done<%=item.id%>" class="edit" type="submit" onclick="handlerExitEditMode('<%=item.id%>')" hidden><img class="icon"
               src="/assets/icons/check-solid.svg" alt="tick image"></button>
         </form>
-        <button id="edit<%=item.id%>" class="edit" onclick="handler('<%=item.id%>')"><img class="icon"
+        <button id="edit<%=item.id%>" class="edit" onclick="handlerEnterEditMode('<%=item.id%>')"><img class="icon"
             src="/assets/icons/pencil-solid.svg" alt="pencil image"></button>
       </div>
       <% } %>
@@ -35,11 +35,18 @@
   </div>
 
   <script>
-    function handler(id) {
+    function handlerEnterEditMode(id) {
       document.getElementById("title" + id).setAttribute("hidden", true)
       document.getElementById("edit" + id).setAttribute("hidden", true)
       document.getElementById("done" + id).removeAttribute("hidden")
       document.getElementById("input" + id).removeAttribute("hidden")
+    }
+
+    function handlerExitEditMode(id) {
+      document.getElementById("input" + id).setAttribute("hidden", true);
+      document.getElementById("done" + id).setAttribute("hidden", true);
+      document.getElementById("title" + id).removeAttribute("hidden");
+      document.getElementById("edit" + id).removeAttribute("hidden");
     }
   </script>
   <%- include('partials/footer.ejs'); -%>

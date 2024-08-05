@@ -1,4 +1,5 @@
 import express from "express";
+import { parse } from "path";
 import pg from "pg"
 
 const app = express();
@@ -47,9 +48,22 @@ app.post("/add", async (req, res) => {
   res.redirect("/");
 });
 
-app.post("/edit", (req, res) => {});
+app.post("/edit", async (req, res) => {
+  try{
+    const updatedItemId = parseInt(req.body.updatedItemId);
+    const updatedItemTitle = req.body.updatedItemTitle;
 
-app.post("/delete", (req, res) => {});
+    await db.query("UPDATE items SET title = $1 WHERE id = $2", [updatedItemTitle, updatedItemId]);
+
+  } catch (err){
+    console.log(err);
+  }
+  res.redirect("/")
+});
+
+app.post("/delete", (req, res) => {
+  
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
